@@ -47,20 +47,20 @@ public class Primatives{
         //2. Ask the user to enter an integer and display the square, cube, and fourth power. Research the
         // Math class and use the pow method for each calculation. Use a loop if you’d like.
 
-        // int userInput;
-        // Scanner scanR = new Scanner(System.in);
-        // System.out.println("Please enter an integer: ");
-        // userInput = scanR.nextInt();
-        // System.out.println("You have entered the number " + userInput);
-        // for(int i = 2; i < 5; i++){
-        //   if(i == 2){
-        //     System.out.println("The square root of " + userInput + " is " + Math.pow(userInput,2));
-        //   } else if(i == 3){
-        //     System.out.println("The cubed root of " + userInput + " is " + Math.pow(userInput,3));
-        //   } else if(i == 4){
-        //     System.out.println("The fourth root of " + userInput + " is " + Math.pow(userInput,4));
-        //   } else {}
-        // }
+        int userInput;
+        Scanner scanR = new Scanner(System.in);
+        System.out.println("Please enter an integer: ");
+        userInput = scanR.nextInt();
+        System.out.println("You have entered the number " + userInput);
+        for(int i = 2; i < 5; i++){
+          if(i == 2){
+            System.out.println("The square root of " + userInput + " is " + Math.pow(userInput,2));
+          } else if(i == 3){
+            System.out.println("The cubed root of " + userInput + " is " + Math.pow(userInput,3));
+          } else if(i == 4){
+            System.out.println("The fourth root of " + userInput + " is " + Math.pow(userInput,4));
+          } else {}
+        }
 
         //-------
         //3. Create two variables of type int. Assign these variables the maximum and minimum values of
@@ -95,20 +95,20 @@ public class Primatives{
         // result with a descriptive message using printf. Demonstrate a value that is finite and one that is
         // not.
 
-        // double userInput2;
-        // float userInput3;
-        // Scanner scanR2 = new Scanner(System.in);
-        // System.out.println("Please enter the first float: ");
-        // userInput2 = scanR2.nextDouble();
-        // System.out.println("Please enter the second float: ");
-        // userInput3 = scanR2.nextFloat();
-        // System.out.println("You have entered: first:" + userInput2 + " second:" + userInput3);
-        // boolean ui2isFinite = Double.isFinite(0/userInput2);
-        // boolean ui3isFinite = Float.isFinite(0/userInput3);
-        // boolean notFinite = Float.isFinite(userInput3/0);
-        // System.out.println("Is user input #1 finite: " + ui2isFinite);
-        // System.out.println("Is user input #2 finite: " + ui3isFinite);
-        // System.out.println("Is programmer's input finite: " + notFinite);
+        double userInput2;
+        float userInput3;
+        Scanner scanR2 = new Scanner(System.in);
+        System.out.println("Please enter the first float: ");
+        userInput2 = scanR2.nextDouble();
+        System.out.println("Please enter the second float: ");
+        userInput3 = scanR2.nextFloat();
+        System.out.println("You have entered: first:" + userInput2 + " second:" + userInput3);
+        boolean ui2isFinite = Double.isFinite(0/userInput2);
+        boolean ui3isFinite = Float.isFinite(0/userInput3);
+        boolean notFinite = Float.isFinite(userInput3/0);
+        System.out.println("Is user input #1 finite: " + ui2isFinite);
+        System.out.println("Is user input #2 finite: " + ui3isFinite);
+        System.out.println("Is programmer's input finite: " + notFinite);
 
         //--------
         // 5. Ask the user to enter an integer dividend and divisor. Compute floor division and the floor
