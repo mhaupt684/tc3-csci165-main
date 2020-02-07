@@ -1,3 +1,20 @@
-Chicken Shwarma Pita 3.99 6
-Freedom Fries 2.99 7
-Fermented Shark Juice 2.5 8
+Invoice Number:               JILA135002062325
+Date:                         06/02/2020
+Time:                         23:25
+
+Item                          Quantity  Price      Total     
+
+===========================================================
+Chicken Shwarma Pita          33        $3.99      $131.67    
+
+Freedom Fries                 44        $2.99      $131.56    
+
+Fermented Shark Juice         55        $2.50      $137.50    
+
+===========================================================
+Subtotal                                           $400.73    
+
+6.25% sales tax                                    $25.05     
+
+Total                                              $425.78    
+
