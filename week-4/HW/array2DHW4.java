@@ -18,14 +18,14 @@ public class array2DHW4{
 
         fillMatrix2DRowMaj(rowMajor,inputFile); //fill the array using row major
         fillMatrix2DColMaj(columnMajor,inputFile); //fill the array using column major
-        //printRow(columnMajor,3,COLUMNS); //user input required for which row you want to print
-        //printAllRows(rowMajor); //print all rows in a matrix
-        //printAllColumns(columnMajor); //print all columns in a matrix
+        printRow(columnMajor,3,COLUMNS); //user input required for which row you want to print
+        printAllRows(rowMajor); //print all rows in a matrix
+        printAllColumns(columnMajor); //print all columns in a matrix
 
-        //System.out.println("\nMax in entire 2d matrix: " + findMax(rowMajor));
-        //System.out.println("Min in entire 2d matrix: " + findMin(rowMajor));
+        System.out.println("\nMax in entire 2d matrix: " + findMax(rowMajor));
+        System.out.println("Min in entire 2d matrix: " + findMin(rowMajor));
 
-        System.out.println("Row with the least change: " + smallestChange(rowMajor));
+        System.out.println("Row index with the least change: " + smallestChange(rowMajor));
 
     } //end of main
 
@@ -33,35 +33,30 @@ public class array2DHW4{
     public static int smallestChange(int[][] matrix){
         int rowIndex = 0; //row index of the row with the least change
         int[] changeArray = new int[ROWS]; //array to save total change for each row
-        int leastChange = 2147483647; //set the record of the row with the least change
-        for(int i = 0; i < ROWS; i++){ //print the array - col maj
-            int totalChange = 0;
-            for(int j = 0; j < COLUMNS-1; j++){
-                int change = Math.abs(matrix[i][j] - matrix[i][j+1]);
-                totalChange += change;
+        int leastChange = 2147483647; //set leastChange to the highest int value
+        for(int i = 0; i < ROWS; i++){ //iterate through each row
+            int totalChange = 0; //create int to keep track of total change for current row
+            for(int j = 0; j < COLUMNS-1; j++){ //iterate through each column of 1 row
+                int change = Math.abs(matrix[i][j] - matrix[i][j+1]); //calculate the absolute value of the change from element n to n+1
+                totalChange += change; //add the change to the total change for the current row
             }
-            changeArray[i] = totalChange;
-            if(changeArray[i] < leastChange){
-                rowIndex = i;
+            changeArray[i] = totalChange; //save total change for this row into the array
+            if(changeArray[i] < leastChange){ //if current total change for this row is less
+                leastChange = changeArray[i]; //set the new value for leastChange
+                rowIndex = i; //save the current row number as the row
             }
-        }
-
-
-        System.out.print("Total Change: ");
-        for(int h = 0; h < ROWS; h++){
-            System.out.println("element" + h + " " + changeArray[h]+" ");
         }
         return rowIndex;
     }
 
     //print all columns in a given matrix
     public static void printAllColumns(int[][] matrix){
-      for(int i = 0; i < COLUMNS; i++){ //print the array - col maj
+      for(int i = 0; i < COLUMNS; i++){ //iterate through columns
           System.out.println("\nColumn " + i);
-          System.out.println("Highest in Column: " + findMaxOfColumn(matrix,i));
-          System.out.println("Lowest in Column: " + findMinOfColumn(matrix,i));
-          for(int j = 0; j < ROWS; j++){
-              System.out.print(matrix[j][i]+" ");
+          System.out.println("Highest in Column: " + findMaxOfColumn(matrix,i)); //print max value of column
+          System.out.println("Lowest in Column: " + findMinOfColumn(matrix,i)); //print max value of column
+          for(int j = 0; j < ROWS; j++){ //iterate through rows
+              System.out.print(matrix[j][i]+" "); //print element
 
           }
       }
@@ -69,12 +64,12 @@ public class array2DHW4{
 
     //print all rows in a given matrix
     public static void printAllRows(int[][] matrix){
-        for(int i = 0; i < ROWS; i++){ //print the array - col maj
+        for(int i = 0; i < ROWS; i++){ //iterate through rows
             System.out.println("\nRow " + i);
-            System.out.println("Highest in Row: " + findMaxOfRow(matrix,i));
-            System.out.println("Lowest in Row: " + findMinOfRow(matrix,i));
-            for(int j = 0; j < COLUMNS; j++){
-                System.out.print(matrix[i][j]+" ");
+            System.out.println("Highest in Row: " + findMaxOfRow(matrix,i)); //print max value of row
+            System.out.println("Lowest in Row: " + findMinOfRow(matrix,i)); //print min value of column
+            for(int j = 0; j < COLUMNS; j++){ //iterate through columns
+                System.out.print(matrix[i][j]+" "); //print element
             }
         }
     }
