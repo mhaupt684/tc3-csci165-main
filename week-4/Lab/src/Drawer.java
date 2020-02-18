@@ -19,6 +19,7 @@ class Drawer extends JPanel {
     public static int COLUMNS;
     public static int[][] GSMATRIX;
     public static int[][] DATAMATRIX;
+    public static int[][] PATHSMATRIX;
     
     
     //Constructor
@@ -66,16 +67,14 @@ class Drawer extends JPanel {
         for(int i = 0; i < COLUMNS; i++) {
         	for(int j = 0; j < ROWS; j++) {
         		int currentColor = GSMATRIX[j][i];
-        		//int currentColor = 100;
         		g2d.drawRect(i,j,squareSize,squareSize);
         		g2d.setColor(new Color(currentColor, currentColor, currentColor));
-                g2d.fillRect(i, j, squareSize, squareSize);
-                 
+                g2d.fillRect(i, j, squareSize, squareSize);      
         	}
         }
-        System.out.println("here");
     }
-    
+        
+       
     
     public static void main(String[] args) {
         
@@ -84,7 +83,6 @@ class Drawer extends JPanel {
 //			System.exit(0); 														//end the program
 //		}
         
-  		
 		int[] matrixDimensions = new int[2];										//array to store the dimensions of the matrix
 		
 		//String cmdLinArg = args[0];													//save the command line argument as a string
@@ -100,7 +98,7 @@ class Drawer extends JPanel {
 		
 		fillMatrix(DATAMATRIX,ROWS,COLUMNS,cmdLinArg);								//fill the data matrix 
 		GSMATRIX = mapGreyscale(DATAMATRIX,ROWS,COLUMNS);
-		System.out.println("here");
+		PATHSMATRIX = generatePathway(DATAMATRIX,ROWS,COLUMNS);
 		
 		EventQueue.invokeLater(new Runnable() {
             @Override
@@ -112,6 +110,106 @@ class Drawer extends JPanel {
     
     
     } // end main
+    
+    
+    //given a column, find the index of the row with min elevation
+    public static int[][] generatePathway(int[][] matrix, int numRows, int numCols){
+    	int[][] pathway = new int[numRows][numCols];
+    	int cTracker = 0;
+    	int rTracker = 0;
+    	int lastColChoice = numCols - 2;
+    	int firstRowChoice = 0;
+    	int lastRowChoice = numRows - 1;
+    	
+    	pathway[cTracker][rTracker] = matrix[cTracker][rTracker];
+    	
+    	for(int c = cTracker; c < lastColChoice; c++) {
+    		int moveRight = c + 1;
+			int upRow = rTracker - 1;
+			int downRow = rTracker + 1;
+			int straight = rTracker;
+			int currentLoc = matrix[c][rTracker];
+			
+			if(rTracker == firstRowChoice) {
+				int choiceStraight = matrix[moveRight][straight];
+				int choiceDown = matrix[moveRight][downRow];
+				int[] changeArray = {currentLoc,choiceStraight,choiceDown};
+				int choice = leastChange(changeArray);
+				
+				if(choice == 1) { //choiceStraight
+					pathway[moveRight][straight] = matrix[moveRight][straight];
+					
+				} else if(choice == 2) { //choiceDown
+					pathway[moveRight][downRow] = matrix[moveRight][downRow];
+					rTracker = downRow;
+				}
+				
+			} else if(rTracker == lastRowChoice) {
+				int choiceUp = matrix[moveRight][upRow];
+				int choiceStraight = matrix[moveRight][straight];
+				int[] changeArray = {currentLoc,choiceUp,choiceStraight};
+				int choice = leastChange(changeArray);
+				
+				if(choice == 1) { //choiceUp
+					pathway[moveRight][upRow] = matrix[moveRight][upRow];
+				} else if(choice == 2) { //choiceStraight
+					pathway[moveRight][straight] = matrix[moveRight][straight];
+				}
+				
+			} else {
+				int choiceUp = matrix[moveRight][upRow];
+				int choiceStraight = matrix[moveRight][straight];
+				int choiceDown = matrix[moveRight][downRow];
+				int[] changeArray = {currentLoc,choiceUp,choiceStraight,choiceDown};
+				int choice = leastChange(changeArray);
+				
+				if(choice == 1) { //choiceUp
+					pathway[moveRight][upRow] = matrix[moveRight][upRow];
+					rTracker = upRow;
+				} else if(choice == 2) { //choiceStraight
+					pathway[moveRight][straight] = matrix[moveRight][straight];
+				} else if(choice == 3) { //choiceDown
+					pathway[moveRight][downRow] = matrix[moveRight][downRow];
+					rTracker = downRow;
+				}
+			
+			}//endif
+    			
+    		if(c%100 == 0) {
+    			System.out.println("Column: " + c + " Row: " + rTracker + " Matrix: " + matrix[c][rTracker]);
+    			System.out.println(currentLoc);
+    		}
+    	}//endfor
+    	
+    	
+    	return pathway;
+    }
+    
+    
+    
+    
+    
+    
+    //takes an array of possible moves and return an integer that signifies which choice
+    public static int leastChange(int[] array) {
+    	int length = array.length;
+    	int choicePos = 0;
+    	int smallestChange = 2147483647;
+    	
+    	for(int i = 0; i < length; i++) {
+    		int change = Math.abs(array[0]-array[1]);
+    		if(change < smallestChange) {
+    			choicePos = i;
+    			smallestChange = change;
+    		} else if(change == smallestChange) {
+    			int randomizer = smallestChange%2;
+    			if(randomizer == 0) {
+    				choicePos = i;
+    			}
+    		}
+    	}
+    	return choicePos;
+    }
     
     
     //returns an int matrix of greyscale values based on data matrix
