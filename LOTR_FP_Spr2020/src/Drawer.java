@@ -14,21 +14,22 @@ class Drawer extends JPanel {
     public static final int SQUARESIZE = 10;
     
     //get matrix variables
-    public static final int ROWS = LOTR_Driver.getMRows();
-    public static final int COLS = LOTR_Driver.getMCols();
     public static final int BEZZLE = LOTR_Driver.getBezzle();
-    
+    private int rows = 0;
+    private int columns = 0;
     
     
 
-    public Drawer() {
+    public Drawer(int rows, int columns) {
+    	this.rows = rows;
+    	this.columns = columns;
         initUI();
     }
 
     private void initUI() {
         window.add(this);
         window.setTitle("2D Drawing");
-        window.setSize((COLS*SQUARESIZE),(ROWS*SQUARESIZE)+BEZZLE);
+        window.setSize((this.columns*SQUARESIZE),(this.rows*SQUARESIZE)+BEZZLE);
         window.setLocationRelativeTo(null);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
@@ -59,8 +60,8 @@ class Drawer extends JPanel {
                
         //loops that draw the squares in column major order
         //x moves horizontally, y moves vertically
-        for(int i = 0; i < COLS; ++i){
-        	for(int j = 0; j < ROWS; j++) {
+        for(int i = 0; i < this.columns; ++i){
+        	for(int j = 0; j < this.rows; j++) {
         		//g2d.fillRect(x, y, SQUARESIZE, SQUARESIZE);
         		g2d.drawRect(x, y, SQUARESIZE, SQUARESIZE);
         		y += SQUARESIZE;

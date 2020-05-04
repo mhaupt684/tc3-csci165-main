@@ -35,6 +35,15 @@ class Coordinate_test {
 		
 	}
 	
+	@Test
+	void testEquals() {
+		Coordinate one = new Coordinate(3,4);
+		Coordinate two = new Coordinate(3,4);
+		Coordinate three = new Coordinate(4,5);
+		assertTrue(one.equals(two));
+		assertFalse(one.equals(three));
+	}
+	
 	
 
 }
