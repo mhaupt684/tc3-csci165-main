@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 
 class get_object_test {
 	
-	Hobbit hobbit2 = new Hobbit();
-	Nazgul nazgul2 = new Nazgul();
+	Coordinate coordinate = new Coordinate(0,0);
+	Hobbit hobbit2 = new Hobbit(coordinate);
+	Nazgul nazgul2 = new Nazgul(coordinate);
 	
 	@Test
 	void test() {

@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 
 class Nazgul_Test {
 	
-	Nazgul nazgul1 = new Nazgul();
 	Coordinate coordinate = new Coordinate(0,0);
+	Nazgul nazgul1 = new Nazgul(coordinate);
+	
 	
 	@Test
 	void test() {

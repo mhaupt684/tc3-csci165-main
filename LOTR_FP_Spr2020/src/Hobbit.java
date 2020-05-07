@@ -1,12 +1,20 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Hobbit extends Creature {
 	
-	
+	Color green = new Color(0,128,0);
+	private int hobbitMaxFoodCount = 3;
+	private int hobbitMaxRepCount = 3;
 
 	
-	public Hobbit() {}
+	public Hobbit(Coordinate c) {
+		super(c);
+		this.determineColor();
+		this.resetFoodCounter();
+		this.resetReproductionCounter();
+	}
 	
 	//scan the neighborhood and return a list of Coordinates
 	@Override
@@ -33,7 +41,7 @@ public class Hobbit extends Creature {
 	
 	
 	@Override
-	public Coordinate determineMove(ArrayList<Coordinate> coordinates, ArrayList<Creature> allCreatures, int maxRows, int maxCols) {
+	public Coordinate determineMove(ArrayList<Coordinate> coordinates, ArrayList<Creature> allCreatures, ArrayList<Item> allItems, int maxRows, int maxCols) {
 		//variable to save the coordinate the is farthest away from the nazgul(s)
 		Coordinate move = super.getCoordinate();
 		//variable to save highest move score
@@ -45,21 +53,29 @@ public class Hobbit extends Creature {
 		
 		//create list to hold nazgul in the neighborhood
 		ArrayList<Creature> nazguls = new ArrayList<Creature>();
+		ArrayList<Coordinate> otherCreatureCoords = new ArrayList<Coordinate>();
 		
-		//look through list of coordinates and check if any Nazgul are in the area
+		//look through list of coordinates and check if any Nazgul/hobbit are in the area
 		for(Coordinate potentialMove: coordinates) {
 			for(Creature potentialThreat: allCreatures) {
 				if(potentialMove.equals(potentialThreat.getCoordinate()) && potentialThreat.getClass().toString().equals("class Nazgul")) {
 					nazguls.add(potentialThreat);
+					otherCreatureCoords.add(potentialThreat.getCoordinate());
+				} else if (potentialMove.equals(potentialThreat.getCoordinate()) && potentialThreat.getClass().toString().equals("class Hobbit")) {
+					otherCreatureCoords.add(potentialThreat.getCoordinate());
 				}
 			}
 		}
+		
+		//remove coords that have hobbit already
+		coordinates.removeAll(otherCreatureCoords);
 		
 		//go through each potential move and calculate which cell is the farthest away from the nazguls
 		for(Coordinate potentialMove: coordinates) {
 			//highest score is the best move
 			double totalScore = 0.0;
 			
+			//this loop calculates points by distance from a nazgul
 			for(Creature escapeDanger: nazguls) {
 				//nazgul position at x1,y1
 				Coordinate nazgul = escapeDanger.getCoordinate();
@@ -82,47 +98,82 @@ public class Hobbit extends Creature {
 				totalScore += distance;				
 			}
 			
+			//this loop calculates point by whether or not food exists
+			for(Item item: allItems) {
+				Coordinate itemCoord = item.getCoordinate();
+				if(potentialMove.equals(itemCoord)) {
+					//specific item worth*maxfood counter / food counter
+					totalScore += (item.getWorth()*this.hobbitMaxFoodCount)/super.getFoodCounter();
+				}
+			}
+			
+			
+			//figure out what to do if there are no nazgul or food
+			
 			//save the score and coord if it's the best move
 			if(totalScore >= bestScore) {
 				bestScore = totalScore;
 				move = potentialMove;
 			}
-		}		
+		}	
+		
+		//if every square has a score of 0 and there is no winner. pick move randomly
+		if(bestScore == 0.0) {
+			int size = coordinates.size();
+			Random random = new Random();
+			int randomMove = Math.abs(random.nextInt(size-1));
+			Coordinate randomMoveCoord = coordinates.get(randomMove);
+			move = randomMoveCoord;
+		}
+		
 		return move;
+	}
+	
+	@Override
+	public void action(ArrayList<Creature> allCreatures, ArrayList<Creature> deadCreatures, ArrayList<Item> allItems, ArrayList<Item> takenItems) {
+		Coordinate currentLocation = super.getCoordinate();
+		
+		for(Item item: allItems) {
+			if(currentLocation.equals(item.getCoordinate())) {
+				String[] creatureAbleToPickUp = item.getPickupAble();
+				for(String creature: creatureAbleToPickUp) {
+					String className = this.getClass().toString();
+					if(creature.equals(className)) {
+						takenItems.add(item);
+						//different items can be added in if else statement
+						if(item.getClass().toString().equals("class Food")) {
+							this.resetFoodCounter();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
-	public Creature replicate() {
-		// TODO Auto-generated method stub
-		return null;
+	public Creature replicate(Coordinate spawnSpot) {
+		Hobbit newHobbit = new Hobbit(spawnSpot);
+		return newHobbit;
 	}
 
 
 	@Override
 	public void resetFoodCounter() {
-		// TODO Auto-generated method stub
-		
+		super.setFoodCounter(hobbitMaxFoodCount);
 	}
 
 	@Override
 	public void resetReproductionCounter() {
-		// TODO Auto-generated method stub
+		super.setReproductionCounter(hobbitMaxRepCount);
 		
 	}
 
 	@Override
-	public void setColor() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Color determineColor() {
-		// TODO Auto-generated method stub
-		return null;
+	public void determineColor() {
+		super.setColor(this.green);
 	}
 	
-	//use hashmap to map food counter number to color
+	
 	
 	
 	

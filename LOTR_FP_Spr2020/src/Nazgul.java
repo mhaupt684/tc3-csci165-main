@@ -1,10 +1,17 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Nazgul extends Creature {
 
+	Color white = new Color(25,255,0);
+	private int nazgulMaxFoodCount = 8;
 	
-	public Nazgul() {}
+	public Nazgul(Coordinate c) {
+		super(c);
+		this.determineColor();
+		this.resetFoodCounter();
+	}
 	
 	//use hashmap to map food counter number to color
 	
@@ -36,7 +43,7 @@ public class Nazgul extends Creature {
 	}
 	
 	@Override
-	public Coordinate determineMove(ArrayList<Coordinate> coordinates, ArrayList<Creature> allCreatures, int maxRows, int maxCols) {
+	public Coordinate determineMove(ArrayList<Coordinate> coordinates, ArrayList<Creature> allCreatures, ArrayList<Item> allItems, int maxRows, int maxCols) {
 		//variable to save the coordinate the is closest to a hobbit
 		Coordinate move = super.getCoordinate();
 		//variable to save highest move score
@@ -82,13 +89,29 @@ public class Nazgul extends Creature {
 				bestScore = totalScore;
 				move = potentialMove;
 			}
-		}		
+		}
+		
+		if(bestScore == 0.0) {
+			int size = coordinates.size();
+			Random random = new Random();
+			int randomMove = Math.abs(random.nextInt(size-1));
+			Coordinate randomMoveCoord = coordinates.get(randomMove);
+			move = randomMoveCoord;
+		}
 		
 		return move;
 	}
+	
+	public void action(ArrayList<Creature> allCreatures, ArrayList<Creature> deadCreatures, ArrayList<Item> allItems, ArrayList<Item> takenItems) {
+		Coordinate currentLocation = super.getCoordinate();
+		
+		for(Creature creature: allCreatures) {
+			//loop through creature and kill eem
+		}
+	}
 
 	@Override
-	public Creature replicate() {
+	public Creature replicate(Coordinate spawnSpot) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -97,7 +120,7 @@ public class Nazgul extends Creature {
 
 	@Override
 	public void resetFoodCounter() {
-		// TODO Auto-generated method stub
+		super.setFoodCounter(nazgulMaxFoodCount);
 		
 	}
 
@@ -108,15 +131,8 @@ public class Nazgul extends Creature {
 	}
 
 	@Override
-	public void setColor() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Color determineColor() {
-		// TODO Auto-generated method stub
-		return null;
+	public void determineColor() {
+		super.setColor(this.white);
 	}
 
 	

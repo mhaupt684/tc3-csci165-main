@@ -10,13 +10,14 @@ public abstract class Creature implements Comparable<Creature> {
 	private Color color = new Color(0,0,0);
 	private int radius = 1;
 	private boolean alive = true;
-	private int moveDistance = 1;
 	private int reproduceCounter = 0;
 	private int foodCounter = 0;
 	
 	
 	//Creature Constructors
-	public Creature() {}
+	public Creature(Coordinate c) {
+		this.setCoordinate(c);
+	}
 	
 	
 	
@@ -32,6 +33,18 @@ public abstract class Creature implements Comparable<Creature> {
 	public Coordinate getCoordinate() {
 		Coordinate coord = new Coordinate(this.coordinate);
 		return coord;
+	}
+	
+	public Color getColor() {
+		return this.color;
+	}
+	
+	public int getFoodCounter() {
+		return this.foodCounter;
+	}
+	
+	public int getReproduceCounter() {
+		return this.reproduceCounter;
 	}
 	
 	
@@ -56,12 +69,27 @@ public abstract class Creature implements Comparable<Creature> {
 		this.coordinate = new Coordinate(newCoordinate);
 	}
 	
-	//diminish counter by 1
-	public void countDown() {
-		
+	//set food counter
+	public void setFoodCounter(int maxCount) {
+		this.foodCounter = maxCount;
+	}
+	
+	//set reproduce counter
+	public void setReproductionCounter(int maxCount) {
+		this.reproduceCounter = maxCount;
 	}
 	
 	
+	//diminish counter by 1
+	public void countDown() {
+		this.reproduceCounter -= 1;
+		this.foodCounter -= 1;
+	}
+	
+	//move to another location
+	public void move(Coordinate move) {
+		this.setCoordinate(move);
+	}
 		
 	//**Creature abstract methods**
 	
@@ -69,13 +97,13 @@ public abstract class Creature implements Comparable<Creature> {
 	public abstract ArrayList<Coordinate> scanNeighborhood(int maxRows, int maxCols);
 	
 	//move a creature -- must be implemented by sub class
-	public abstract Coordinate determineMove(ArrayList<Coordinate> coordinates, ArrayList<Creature> allCreatures, int maxRows, int maxCols);
+	public abstract Coordinate determineMove(ArrayList<Coordinate> coordinates, ArrayList<Creature> allCreatures, ArrayList<Item> allItems, int maxRows, int maxCols);
 	
 	//replicate -- must be implemented by sub class
-	public abstract Creature replicate();
+	public abstract Creature replicate(Coordinate spawnSpot);
 	
-	//set the new square color based on food counter
-	public abstract void setColor();
+	//action - basically hurt or consume\
+	public abstract void action(ArrayList<Creature> allCreatures, ArrayList<Creature> deadCreatures, ArrayList<Item> allItems, ArrayList<Item> takenItems);
 	
 	//reset food counter
 	public abstract void resetFoodCounter();
@@ -84,7 +112,7 @@ public abstract class Creature implements Comparable<Creature> {
 	public abstract void resetReproductionCounter();
 	
 	//determine color
-	public abstract Color determineColor();
+	public abstract void determineColor();
 	
 	
 	
@@ -95,6 +123,8 @@ public abstract class Creature implements Comparable<Creature> {
 		if(this.coordinate.compareTo(other.coordinate) > 0) return 1;
 		return 0;
 	}
+	
+	
 	
 	
 	

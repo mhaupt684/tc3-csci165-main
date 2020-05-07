@@ -70,6 +70,23 @@ class Drawer extends JPanel {
         	y = 0;
             x += SQUARESIZE;
         }
+        
+        //loops through the creatures list and prints the creatures
+        for(Creature c: LOTR_Driver.creatures) {
+        	Coordinate location = new Coordinate(c.getCoordinate());
+        	System.out.println("Location: " + location.toString());
+        	
+        	Color color = c.getColor();
+        	g2d.setColor(color);
+        	
+        	System.out.println(g2d.getColor().toString());
+        	
+        	int xC = SQUARESIZE*(c.getCoordinate().getCol());
+        	int yC = SQUARESIZE*(c.getCoordinate().getRow());
+        	
+        	g2d.fillRect(xC, yC, SQUARESIZE, SQUARESIZE);
+        }
+        
 
 //        g2d.setColor(new Color(0, 0, 0));
 //        y = 10; x += 15;
